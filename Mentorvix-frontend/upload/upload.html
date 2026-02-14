@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Upload Assignment | MentorVix AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(180deg,#020617,#071630);
+    font-family:Segoe UI, Arial, sans-serif;
+    color:white;
+  }
+
+  .card{
+    width:420px;
+    background:rgba(10,25,60,0.9);
+    border-radius:16px;
+    padding:28px;
+    text-align:center;
+    box-shadow:0 0 30px rgba(93,169,255,0.25);
+    border:1px solid rgba(93,169,255,0.3);
+  }
+
+  h2{
+    color:#5da9ff;
+    margin-bottom:8px;
+  }
+
+  p{
+    color:#b8c7dd;
+    font-size:14px;
+    margin-bottom:18px;
+  }
+
+  input[type="file"]{
+    display:none;
+  }
+
+  .choose-btn{
+    width:100%;
+    background:#5da9ff;
+    color:#00142d;
+    border:none;
+    padding:14px;
+    font-weight:bold;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:15px;
+  }
+
+  .choose-btn:hover{
+    background:#7bbcff;
+  }
+
+  .status{
+    margin-top:12px;
+    font-size:13px;
+    color:#ffb703;
+  }
+
+  .analyze-btn{
+    margin-top:18px;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    font-size:15px;
+    background:#9aa3af;
+    color:#1f2937;
+    cursor:not-allowed;
+  }
+
+  .analyze-btn.active{
+    background:#22c55e;
+    color:#022c22;
+    cursor:pointer;
+  }
+
+  .analyze-btn.active:hover{
+    background:#4ade80;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Upload Assignment</h2>
+  <p>
+    Please upload your assignment.
+    Our AI will analyze your file and provide personalized feedback.
+  </p>
+
+  <input type="file" id="assignmentFile" accept=".pdf, .docx" hidden>
+  <label for="assignmentFile"class="choose-btn">
+    💭Choose File To Upload
+  </label>
+
+  <div id="status" class="status">No file chosen</div>
+
+  <button id="analyzeBtn" class="analyze-btn" disabled>
+    Analyze with AI
+  </button>
+<div id="status"></div>
+</div>
+<script>
+  const fileInput = document.getElementById("assignmentFile");
+  const analyzeBtn = document.getElementById("analyzeBtn");
+  const statusDiv = document.getElementById("status");
+
+  analyzeBtn.disabled = true;
+
+  fileInput.addEventListener("change", () => {
+    const file = fileInput.files[0];
+
+    if (!file) {
+      statusDiv.innerText = "No file chosen";
+      analyzeBtn.disabled = true;
+      return;
+    }
+
+    const allowedTypes = [
+      "application/pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+      alert("Only PDF or DOCX allowed");
+      fileInput.value = "";
+      statusDiv.innerText = "Invalid file type";
+      analyzeBtn.disabled = true;
+      return;
+    }
+
+    statusDiv.innerText = file.name;
+    analyzeBtn.disabled = false;
+  });
+
+  analyzeBtn.addEventListener("click", async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    analyzeBtn.disabled = true;
+    statusDiv.innerText = "Uploading...";
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    // Upload
+    const uploadRes = await fetch("http://127.0.0.1:8000/api/assignments/upload/", {
+      method: "POST",
+      body: formData
+    });
+
+    const uploadData = await uploadRes.json();
+    const assignmentId = uploadData.id;
+
+    statusDiv.innerText = "Analyzing with AI...";
+
+    // Analyze
+    await fetch(`http://127.0.0.1:8000/api/assignments/analyze/${assignmentId}/`, {
+  method: "POST",
+});
+
+    // Redirect
+    window.location.href = `../chat/aireview.html?id=${assignmentId}`;
+  });
+</script>
+</body>
+</html>

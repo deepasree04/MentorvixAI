@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorVix AI | Roadmap</title>
+    <style>
+        /* RESET & BASE STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #020817;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            /* Background glow effects */
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(30, 64, 175, 0.2) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 1) 0%, #020817 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* HEADER */
+        .logo {
+            color: #3b82f6;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 60px;
+            font-size: 1.2rem;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .hero-content { flex: 1; }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .hero-content p {
+            color: #94a3b8;
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background: #2563eb;
+            color: white;
+            padding: 14px 32px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #3b82f6;
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .hero-image {
+            flex: 1;
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+
+        /* GRID SECTION */
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .roadmap-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        /* GLASS CARD EFFECT */
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 24px;
+            transition: 0.3s ease;
+            opacity: 1; /* For JS animation */
+            transform: translateY(0);
+            cursor: pointer;
+        }
+
+        .card:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .card ul {
+            list-style: none;
+        }
+
+        .card ul li {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .card ul li::before {
+            content: "•";
+            color: #475569;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        .card {
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.card-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  margin-top: 10px;
+}
+
+.card.open .card-content {
+  max-height: 500px;
+}
+
+.card a {
+  color: #60a5fa;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.card a:hover {
+  text-decoration: underline;
+}
+
+        footer {
+            margin-top: 100px;
+            text-align: center;
+            color: #475569;
+            font-size: 0.9rem;
+            padding-bottom: 40px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .hero { flex-direction: column; text-align: center; }
+            .hero-content h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="logo">MENTORVIX AI</header>
+
+        <section class="hero">
+            <div class="hero-content">
+                <h1 id="roadmap-title"></h1>
+                <p id="roadmap-desc"></p>
+                <button class="btn">Start Learning</button>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80" alt="Code on laptop">
+            </div>
+        </section>
+
+        <h2 class="section-title">Learning Roadmap</h2>
+        <div class="roadmap-grid" id="roadmapGrid"></div>
+<section id="resourceSection" style="display:none; margin-top:40px;">
+  <h2 id="resourceTitle"></h2>
+
+  <div class="card">
+    <h3>📺 YouTube Channels</h3>
+    <ul id="youtubeList"></ul>
+  </div>
+
+  <div class="card">
+    <h3>🌐 Websites</h3>
+    <ul id="websiteList"></ul>
+  </div>
+
+  <div class="card">
+    <h3>💻 GitHub Projects</h3>
+    <ul id="githubList"></ul>
+  </div>
+</section>
+<div style="text-align:center; margin-top:60px;">
+  <a href="../assignment-page/listpage.html" class="btn">
+    Go to Assignments
+  </a>
+</div>
+
+        <footer>
+            &copy; 2026 MentorVix AI. All Rights Reserved.
+        </footer>
+    </div>
+<script>
+let roadmapData = null;
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const career = new URLSearchParams(window.location.search).get("career");
+
+  if (!career) {
+    document.getElementById("roadmap-title").innerText = "Select a Career Path";
+    return;
+  }
+
+  try {
+    const res = await fetch(`http://127.0.0.1:8000/api/roadmap/?career=${career}`);
+    roadmapData = await res.json();
+
+    document.getElementById("roadmap-title").innerText = roadmapData.title;
+    document.getElementById("roadmap-desc").innerText = roadmapData.description || "";
+
+    const grid = document.getElementById("roadmapGrid");
+    grid.innerHTML = "";
+
+    Object.keys(roadmapData.sections).forEach(sectionName => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <h3>${sectionName}</h3>
+        <button class="btn small-btn">Mark as Completed</button>
+      `;
+
+      // 👉 Button logic
+      const completeBtn = card.querySelector(".small-btn");
+      completeBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        completeBtn.innerText = "Completed ✅";
+        completeBtn.disabled = true;
+      });
+
+      // 👉 Card click → load resources
+      card.addEventListener("click", () => loadResources(sectionName));
+
+      grid.appendChild(card);
+
+      // animation
+      setTimeout(() => card.classList.add("show"), 100);
+    });
+
+  } catch (err) {
+    console.error("Error loading roadmap:", err);
+  }
+});
+
+// Load resources
+function loadResources(sectionName) {
+  const section = roadmapData.sections[sectionName];
+  if (!section) return;
+
+  document.getElementById("resourceSection").style.display = "block";
+  document.getElementById("resourceTitle").innerText = sectionName;
+
+  fillList("youtubeList", section.youtube);
+  fillList("websiteList", section.websites);
+  fillList("githubList", section.github_projects);
+}
+
+function fillList(id, items) {
+  const ul = document.getElementById(id);
+  ul.innerHTML = "";
+
+  if (!items || items.length === 0) {
+    ul.innerHTML = "<li>No resources yet</li>";
+    return;
+  }
+
+  items.forEach(link => {
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="${link}" target="_blank">${link}</a>`;
+    ul.appendChild(li);
+  });
+}
+</script>
+</body>
+</html>

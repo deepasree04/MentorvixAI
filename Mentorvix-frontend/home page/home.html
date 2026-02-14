@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MentorVix AI</title>
+    <link rel="stylesheet" href="home.css">  <!-- Your CSS file -->
+</head>
+<body>
+
+    <!-- Navbar -->
+
+    <header class="navbar">
+        <div class="logo">MENTORVIX AI</div>
+
+        <nav class="menu">
+    <a href="../profile/profile.html">Profile</a>
+    <a href="../home page/home.html">Home</a>
+    <a href="../chat/aichat.html">AI Assistant / AI chat</a>
+    <a href="../assignment-page/listpage.html">Assignments</a>
+    <a href="../upload/upload.html">Upload</a>
+</nav>
+
+
+        <a id="openlogin"class="btn-get-started" href="../auth/loginsignup.html">Get Started</a>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Your Personal <br> AI Career Assistant.</h1>
+            <p>Intelligent guidance to help you choose careers, learn skills, and grow faster.</p>
+
+        </div>
+
+        <div class="hero-image">
+            <img src="../asset/logo.png.png
+            " alt="Hero hero-image">
+        </div>
+    </section>
+
+    <!-- Why Section -->
+    <section class="why">
+        <h2>Why MentorVix AI?</h2>
+
+        <div class="why-cards">
+            <div class="card">
+                <h3>Smart Guidance</h3>
+                <p>AI answers your career questions instantly.</p>
+            </div>
+
+            <div class="card">
+                <h3>Personalized Learning Path</h3>
+                <p>Get custom learning plans based on your goals.</p>
+            </div>
+
+            <div class="card">
+                <h3>Job-Ready Support</h3>
+                <p>Resume help, interview prep & practice tasks.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Suggest Box -->
+    </section>
+    <section class="suggest">
+    <div class="suggest-left">
+        <h3>Suggest a career .</h3>
+        <p>Select what you are interested in:</p>
+        <div class="career-suggest-box">
+  <div class="interest-options">
+    <button onclick="suggestCareer('coding')">💻 Coding</button>
+    <button onclick="suggestCareer('data')">📊 Data & Maths</button>
+    <button onclick="suggestCareer('design')">🎨 Design</button>
+    <button onclick="suggestCareer('cloud')">☁️ Cloud</button>
+  </div>
+
+  <div id="careerResult" class="career-result"></div>
+</div>
+
+        <!-- ADD THIS -->
+        <p id="careerResult" style="margin-top:15px; font-size:18px; font-weight:bold;"></p>
+    </div>
+</section>
+
+    <!-- Career Paths -->
+ <section class="career-section">
+  <h2 class="career-title">Career Paths</h2>
+
+  <div class="career-grid">
+
+    <div class="career-card" onclick="goToRoadmap('fullstack')">
+      <h3>Full Stack<br>Developer</h3>
+      <div class="icons">
+        <span>💻</span><span>⚛️</span><span>🗄️</span><span>☁️</span>
+      </div>
+    </div>
+
+    <div class="career-card" onclick="goToRoadmap('data')">
+      <h3>Data<br>Analyst</h3>
+      <div class="icons">
+        <span>📊</span><span>🐍</span><span>📈</span>
+      </div>
+    </div>
+
+    <div class="career-card" onclick="goToRoadmap('security')">
+      <h3>Cloud<br>Security</h3>
+      <div class="icons">
+        <span>🔐</span><span>☁️</span><span>🛡️</span>
+      </div>
+    </div>
+
+    <div class="career-card" onclick="goToRoadmap('cloud')">
+      <h3>Cloud<br>Engineer</h3>
+      <div class="icons">
+        <span>☁️</span><span>⚙️</span><span>🚀</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Roadmap section (hidden by default) -->
+<section id="roadmap" style="display:none; margin-top:40px;">
+  <h2 id="roadmap-title"></h2>
+  <ul id="roadmap-content"></ul>
+</section>  
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 MentorVix AI — All Rights Reserved</p>
+    </footer>
+    <script>
+  
+function goToRoadmap(career) {
+  console.log("Career clicked:", career); // debug log
+
+  window.location.href =
+    "../roadmap/roadmap.html?career=" + career;
+}
+
+function suggestCareer(interest) {
+  let career = "";
+  let topics = [];
+
+  if (interest === "coding") {
+    career = "Full Stack Developer";
+    topics = [
+      "HTML, CSS, JavaScript",
+      "Frontend Frameworks (React)",
+      "Backend (Python / Django)",
+      "Databases",
+      "Projects"
+    ];
+  }
+
+  else if (interest === "data") {
+    career = "Data Scientist";
+    topics = [
+      "Python",
+      "Statistics & Probability",
+      "Data Analysis",
+      "Machine Learning",
+      "Projects"
+    ];
+  }
+
+  else if (interest === "design") {
+    career = "UI / UX Designer";
+    topics = [
+      "Design Principles",
+      "Figma",
+      "User Research",
+      "Wireframing",
+      "Portfolio"
+    ];
+  }
+
+  else if (interest === "cloud") {
+    career = "Cloud Engineer";
+    topics = [
+      "Linux Basics",
+      "Networking",
+      "AWS / Azure",
+      "DevOps Basics",
+      "Cloud Projects"
+    ];
+  }
+
+  // Build output
+  let html = `
+    <h3>✅ Suggested Career: ${career}</h3>
+    <p><strong>What to study:</strong></p>
+    <ul>
+      ${topics.map(t => `<li>${t}</li>`).join("")}
+    </ul>
+    <button onclick="startPath('${career}')" class="btn">
+      Start Path
+    </button>
+  `;
+
+  document.getElementById("careerResult").innerHTML = html;
+}
+
+// Redirect to roadmap page
+function startPath(career) {
+  const careerMap = {
+    "Full Stack Developer": "fullstack",
+    "Data Scientist": "data-science",
+    "UI / UX Designer": "ui-ux",
+    "Cloud Engineer": "cloud"
+  };
+
+  window.location.href =
+    `/Mentorvix-frontend/roadmap/roadmap.html?career=${careerMap[career]}`;
+}
+</script>
+</body>
+</html>

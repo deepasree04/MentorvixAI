@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Profile | Mentorvix</title>
+
+<style>
+/* ================= RESET ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ================= BODY ================= */
+body {
+  background: linear-gradient(135deg, #05124d, #0f172a);
+  color: #e5e7eb;
+  min-height: 100vh;
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.nav-links a {
+  margin-right: 20px;
+  text-decoration: none;
+  color: #cbd5f5;
+}
+
+.primary-btn {
+  background: #22d3ee;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* ================= PROFILE ================= */
+.profile-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 60px;
+}
+
+.profile-card {
+  width: 380px;
+  background: #071659;
+  border-radius: 18px;
+  padding: 28px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+.profile-header {
+  text-align: center;
+}
+
+.avatar {
+  width: 72px;
+  height: 72px;
+  background: #22d3ee;
+  color: 071f4d;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 22px;
+  margin: auto;
+}
+
+.profile-header h2 {
+  margin-top: 12px;
+}
+
+.profile-header p {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+.divider {
+  height: 1px;
+  background: #1e293b;
+  margin: 20px 0;
+}
+
+.profile-section h4 {
+  margin-bottom: 8px;
+}
+
+.profile-section p {
+  font-size: 14px;
+  color: #cbd5f5;
+}
+
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skills span {
+  background: #1e293b;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 13px;
+}
+
+.profile-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.secondary-btn {
+  flex: 1;
+  background: #1e293b;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+.danger-btn {
+  flex: 1;
+  background: #ef4444;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+  <div class="logo">Mentorvix AI</div>
+  <div class="nav-links">
+    <a href="../home page/home.html">Home</a>
+    <a href="../chat/aichat.html">AI Assistant</a>
+    <button class="primary-btn"href="../home page/home.html">Get Started</button>
+  </div>
+</nav>
+
+<!-- ================= PROFILE ================= -->
+<main class="profile-container">
+  <section class="profile-card">
+
+    <div class="profile-header">
+      <div class="avatar" id="avatar">ME</div>
+      <h2 id="username">Loading...</h2>
+      <p id="email">Loading...</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="profile-section">
+      <h4>About</h4>
+      <p>
+        Software developer with a passion for AI and machine learning.
+      </p>
+    </div>
+
+    <div class="profile-section">
+      <h4>Skills</h4>
+      <div class="skills">
+        <span>Python</span>
+        <span>Java</span>
+        <span>SQL</span>
+        <span>Django</span>
+      </div>
+    </div>
+
+    <div class="profile-actions">
+      <button class="secondary-btn">Edit Profile</button>
+      <button class="danger-btn" onclick="logout()">Logout</button>
+    </div>
+
+  </section>
+</main>
+
+<!-- ================= JS ================= -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("access");
+
+  if (!token) {
+    window.location.href = "../auth/loginsignup.html";
+    return;
+  }
+
+  fetch("http://127.0.0.1:8000/api/auth/profile/", {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  })
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("username").innerText = data.username;
+    document.getElementById("email").innerText = data.email;
+    document.getElementById("avatar").innerText =
+      data.username.slice(0,2).toUpperCase();
+  })
+  .catch(() => {
+    alert("Failed to load profile");
+  });
+});
+
+function logout() {
+  localStorage.clear();
+  window.location.href = "../auth/loginsignup.html";
+}
+</script>
+
+</body>
+</html>

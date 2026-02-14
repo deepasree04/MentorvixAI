@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MENTORVIX AI — Chat</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+:root{
+  --bg1:#020617;
+  --bg2:#071022;
+  --bot:#0f2a44;
+  --user:#14325a;
+  --accent:#5da9ff;
+  --text:#e7f1fb;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  height:100%;
+  margin:0;
+  font-family:Segoe UI, Arial, sans-serif;
+  background:linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:var(--text);
+}
+
+/* MAIN APP */
+.app{
+  width:100%;
+  max-width: 900px;
+  height:100vh;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  background:#071630;
+}
+
+/* HEADER */
+header{
+  padding:16px;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+}
+header h2{margin:0}
+header small{color:#9fb2c8}
+
+/* CHAT AREA */
+.chat{
+  flex:1;
+  padding:16px;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.msg{
+  max-width:75%;
+  padding:14px 16px;
+  border-radius:14px;
+  font-size:15px;
+}
+
+.bot{
+  background:var(--bot);
+  align-self:flex-start;
+}
+
+.user{
+  background:var(--user);
+  align-self:flex-end;
+}
+
+/* INPUT */
+.composer{
+  display:flex;
+  gap:10px;
+  padding:14px;
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+
+input{
+  flex:1;
+  padding:22px;
+  font-size:16px;
+  border-radius:16px;
+  border:none;
+  outline:none;
+}
+
+button{
+  padding:22px 26px;
+  font-size:16px;
+  border:none;
+  border-radius:16px;
+  background:var(--accent);
+  font-weight:bold;
+  cursor:pointer;
+  .quick-suggestions{
+  display:flex;
+  gap:8px;
+  padding:10px 16px;
+  flex-wrap:wrap;
+}
+
+.quick-suggestions button{
+  background:rgba(93,169,255,0.15);
+  border:1px solid rgba(93,169,255,0.3);
+  color:#cfe8ff;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.quick-suggestions button:hover{
+  background:rgba(93,169,255,0.3);
+}
+
+}
+.typing{
+  opacity:0.6;
+  font-size:italic;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+  <header>
+    <h2>MENTORVIX <span style="color:#5da9ff">AI</span></h2>
+    <small>AI Chat</small>
+  </header>
+
+  <div id="chat" class="chat">
+    <div class="msg bot">Hello! How can I assist you today?</div>
+  </div>
+
+ <div class="quick-suggestions">
+  <button onclick="quickSend('Data Science')">Data Science</button>
+  <button onclick="quickSend('Web Development')">Web Development</button>
+  <button onclick="quickSend('AI')">AI</button>
+  <button onclick="quickSend('Cloud')">Cloud</button>
+</div>
+<div class="composer">
+  <input id="input"type="text"placeholder="Type a message..."/>
+  <button onclick="send()">Send</button>
+</div>
+
+</div>
+<script>
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+
+function addBotMessage(text) {
+    const div = document.createElement("div");
+    div.className = "msg bot";
+    div.innerText = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function addUserMessage(text) {
+    const div = document.createElement("div");
+    div.className = "msg user";
+    div.innerText = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+function send() {
+    let message = input.value.trim().toLowerCase();
+    if (!message) return;
+
+    addUserMessage(message);
+    input.value = "";
+
+    fetch("http://127.0.0.1:8000/api/ai-chat/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ interest: message })
+    })
+    .then(res => {
+        if (!res.ok) throw new Error("Server error");
+        return res.json();
+    })
+    .then(data => {
+        let reply = "";
+
+        if (data.career) {
+            reply += "🎯 Career: " + data.career + "\n\n";
+        }
+
+        if (data.roadmap) {
+            reply += "📍 Roadmap:\n";
+            data.roadmap.forEach((step, i) => {
+                reply += `${i + 1}. ${step}\n`;
+            });
+        }
+
+        if (data.resources) {
+            reply += "\n📚 Resources:\n";
+
+            if (data.resources.youtube) {
+                reply += "\nYouTube:\n";
+                data.resources.youtube.forEach(link => {
+                    reply += "- " + link + "\n";
+                });
+            }
+
+            if (data.resources.pdf) {
+                reply += "\nPDF:\n";
+                data.resources.pdf.forEach(link => {
+                    reply += "- " + link + "\n";
+                });
+            }
+        }
+
+        addBotMessage(reply || "⚠️ No data received");
+    })
+    .catch(err => {
+        console.error(err);
+        addBotMessage("❌ Frontend error (check console)");
+    });
+}
+
+function quickSend(text) {
+    input.value = text;
+    send();
+}
+</script>
+</html>
+</body>
