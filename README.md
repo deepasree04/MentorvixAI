@@ -7,10 +7,6 @@ This project demonstrates practical knowledge of web development, version contro
 
 ## Key Features
 - AI-based career recommendations
-- Resume review and feedback system
-- Skill gap identification
-- Responsive user interface
-- Structured project architecture
 
 ## Tech Stack
 Frontend: HTML, CSS, JavaScript  
