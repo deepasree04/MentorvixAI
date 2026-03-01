@@ -9,8 +9,11 @@ This project demonstrates practical knowledge of web development, version contro
 - AI-based career recommendations
 
 ## Tech Stack
-Frontend: HTML, CSS, JavaScript  
-Version Control: Git and GitHub  
+Backend: Python, Django
+Database: SQLite (development)
+Frontend: HTML, CSS, JavaScript
+API Style: REST (JSON)
+Version Control: Git & GitHub
 
 ## Responsibilities
 - Designed and developed the complete frontend interface
