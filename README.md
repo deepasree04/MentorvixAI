@@ -10,9 +10,13 @@ This project demonstrates practical knowledge of web development, version contro
 
 ## Tech Stack
 Backend: Python, Django
+
 Database: SQLite (development)
+
 Frontend: HTML, CSS, JavaScript
+
 API Style: REST (JSON)
+
 Version Control: Git & GitHub
 
 ## Responsibilities
