@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MentorVix AI - Login & Signup</title>
   <link rel="stylesheet" href="styleloginsignup.css">
 </head>
@@ -47,9 +48,12 @@
           <a href="#">Forgot password?</a>
         </div>
 
+        <!-- Inline message area -->
+        <div id="loginMessage" class="form-message"></div>
+
         <div class="field btn">
           <div class="btn-layer"></div>
-          <input type="submit" value="Login">
+          <input type="submit" value="Login" id="loginBtn">
         </div>
 
         <div class="signup-link">
@@ -62,7 +66,11 @@
       <form class="signup" id="signupForm">
 
         <div class="field">
-          <input id="signupEmail" type="text" placeholder="Email Address" required>
+          <input id="signupUsername" type="text" placeholder="Username" required>
+        </div>
+
+        <div class="field">
+          <input id="signupEmail" type="email" placeholder="Email Address" required>
         </div>
 
         <div class="field">
@@ -73,9 +81,12 @@
           <input id="signupConfirm" type="password" placeholder="Confirm password" required>
         </div>
 
+        <!-- Inline message area -->
+        <div id="signupMessage" class="form-message"></div>
+
         <div class="field btn">
           <div class="btn-layer"></div>
-          <input type="submit" value="Signup">
+          <input type="submit" value="Signup" id="signupBtn">
         </div>
 
       </form>
@@ -84,7 +95,7 @@
   </div>
 </div>
 
-<!-- ✅ JS (IMPORTANT: keep defer) -->
+<!-- JS -->
 <script src="loginsignup.js" defer></script>
 
 </body>
