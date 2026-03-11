@@ -44,9 +44,9 @@ Provides a score and feedback to help users improve their submissions.
 
 Users can view all their uploaded assignments and reviews in one place.
 
-👤 User Dashboard / Profile Page
+👤  Profile Page
 
-Displays user information, assignments, and progress in a personal dashboard.
+Displays user information.
 
 ## Tech Stack
 Backend: Python, Django
