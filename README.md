@@ -6,7 +6,45 @@ MentorVix AI is a web-based career guidance application developed as a final-yea
 This project demonstrates practical knowledge of web development, version control, and application design.
 
 ## Key Features
-- AI-based career recommendations
+🔐 User Authentication
+
+Secure signup, login, and profile management for users.
+
+🤖 AI Chat Assistant
+
+Interactive AI assistant that provides career guidance and answers user queries.
+
+🎯 Career Suggestion System
+
+Suggests suitable career paths such as Data Science,  Cloud Engineering, and Full Stack Development based on user interest.
+
+🧭 Personalized Career Roadmaps
+
+Provides step-by-step learning paths for different tech careers.
+
+📚 Learning Resources Recommendation
+
+Curated YouTube channels and learning materials for each career path.
+
+📤 Assignment Upload System
+
+Users can upload assignments for AI-based evaluation.
+
+📝 AI Assignment Review
+
+Automatically reviews assignments and generates feedback with improvement suggestions.
+
+⭐ Feedback Score System
+
+Provides a score and feedback to help users improve their submissions.
+
+📋 Assignment  List
+
+Users can view all their uploaded assignments and reviews in one place.
+
+👤 User Dashboard / Profile Page
+
+Displays user information, assignments, and progress in a personal dashboard.
 
 ## Tech Stack
 Backend: Python, Django
