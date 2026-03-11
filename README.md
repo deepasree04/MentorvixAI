@@ -1,9 +1,11 @@
 # MentorVix AI – AI Career Guidance Web Application
 
 ## Project Overview
-MentorVix AI is a web-based career guidance application developed as a final-year BCA mini project. The platform helps students receive AI-powered career suggestions, resume feedback, and skill gap analysis to improve their job readiness.
+MentorVix AI is a web-based career guidance application developed as a final-year BCA mini project. The platform helps students receive AI-powered career suggestions, learning roadmaps, and assignment feedback to improve their technical skills and career readiness.
 
-This project demonstrates practical knowledge of web development, version control, and application design.
+Users can interact with an AI assistant to explore different technology careers, access curated learning resources, and upload assignments for automated review and scoring.
+
+This project demonstrates practical knowledge of web development, API design, and version control using Git and GitHub.
 
 ## Key Features
 🔐 User Authentication
@@ -58,10 +60,25 @@ API Style: REST (JSON)
 Version Control: Git & GitHub
 
 ## Responsibilities
-- Designed and developed the complete frontend interface
-- Implemented core career suggestion logic
-- Managed version control using Git
-- Maintained project repository on GitHub
+
+Designed and developed the frontend interface
+
+Implemented the career suggestion logic
+
+Developed backend functionality using Django
+
+Managed version control using Git
+
+Maintained the project repository on GitHub
+
+## Future Improvements
+Advanced AI-based recommendation system
+
+Learning progress tracking dashboard
+
+Admin panel for managing career resources
+
+Integration with external learning platforms
 
 ## Project Type
 Final Year BCA Mini Project
