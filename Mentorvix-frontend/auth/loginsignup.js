@@ -118,7 +118,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         showMessage("loginMessage", "Login successful! Redirecting…", "success");
         setTimeout(() => {
-          window.location.href = "../home page/home.html";
+          const redirect = new URLSearchParams(window.location.search).get('redirect');
+          if (redirect === 'assignment') {
+            window.location.href = "../assignment-page/listpage.html";
+          } else {
+            window.location.href = "../home page/home.html";
+          }
         }, 600);
 
       } catch (err) {
@@ -194,7 +199,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         showMessage("signupMessage", "Account created! Redirecting…", "success");
         setTimeout(() => {
-          window.location.href = "../home page/home.html";
+          const redirect = new URLSearchParams(window.location.search).get('redirect');
+          if (redirect === 'assignment') {
+            window.location.href = "../assignment-page/listpage.html";
+          } else {
+            window.location.href = "../home page/home.html";
+          }
         }, 600);
 
       } catch (err) {

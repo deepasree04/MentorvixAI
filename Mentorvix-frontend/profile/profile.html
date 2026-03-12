@@ -1,232 +1,532 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Profile | Mentorvix</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../shared/global.css">
 
-<style>
-/* ================= RESET ================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Segoe UI", sans-serif;
-}
+  <style>
+    /* ================= RESET ================= */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+    }
 
-/* ================= BODY ================= */
-body {
-  background: linear-gradient(135deg, #05124d, #0f172a);
-  color: #e5e7eb;
-  min-height: 100vh;
-}
+    /* ================= BODY ================= */
+    body {
+      background: linear-gradient(180deg, #020617, #071630);
+      color: #e5e7eb;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-/* ================= NAVBAR ================= */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 18px 40px;
-}
+    /* ================= NAVBAR ================= */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 40px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
 
-.logo {
-  font-size: 20px;
-  font-weight: 600;
-}
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
 
-.nav-links a {
-  margin-right: 20px;
-  text-decoration: none;
-  color: #cbd5f5;
-}
+    .nav-links a {
+      margin-right: 20px;
+      text-decoration: none;
+      color: #cbd5f5;
+      font-size: 14px;
+      transition: color 0.25s;
+    }
 
-.primary-btn {
-  background: #22d3ee;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-}
+    .nav-links a:hover {
+      color: #ffffff;
+    }
 
-/* ================= PROFILE ================= */
-.profile-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 60px;
-}
+    .primary-btn {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      color: white;
+      font-size: 14px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
 
-.profile-card {
-  width: 380px;
-  background: #071659;
-  border-radius: 18px;
-  padding: 28px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-}
+    .primary-btn:hover {
+      box-shadow: 0 6px 25px rgba(37, 99, 235, 0.4);
+    }
 
-.profile-header {
-  text-align: center;
-}
+    /* ================= PROFILE ================= */
+    .page-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 50px 20px 40px;
+    }
 
-.avatar {
-  width: 72px;
-  height: 72px;
-  background: #22d3ee;
-  color: 071f4d;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 22px;
-  margin: auto;
-}
+    .profile-card {
+      width: 420px;
+      max-width: 100%;
+      background: rgba(7, 22, 89, 0.8);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s ease;
+    }
 
-.profile-header h2 {
-  margin-top: 12px;
-}
+    .profile-card:hover {
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+    }
 
-.profile-header p {
-  font-size: 14px;
-  color: #94a3b8;
-}
+    .profile-header {
+      text-align: center;
+    }
 
-.divider {
-  height: 1px;
-  background: #1e293b;
-  margin: 20px 0;
-}
+    .avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #2563eb, #22d3ee);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 24px;
+      margin: 0 auto 14px;
+      box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+    }
 
-.profile-section h4 {
-  margin-bottom: 8px;
-}
+    .profile-header h2 {
+      margin-top: 0;
+      font-size: 22px;
+    }
 
-.profile-section p {
-  font-size: 14px;
-  color: #cbd5f5;
-}
+    .profile-header p {
+      font-size: 14px;
+      color: #94a3b8;
+    }
 
-.skills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.08);
+      margin: 22px 0;
+    }
 
-.skills span {
-  background: #1e293b;
-  padding: 6px 12px;
-  border-radius: 12px;
-  font-size: 13px;
-}
+    .profile-section {
+      margin-bottom: 18px;
+    }
 
-.profile-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 22px;
-}
+    .profile-section h4 {
+      margin-bottom: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--mv-accent-light, #60a5fa);
+    }
 
-.secondary-btn {
-  flex: 1;
-  background: #1e293b;
-  border: none;
-  padding: 10px;
-  border-radius: 10px;
-  color: white;
-  cursor: pointer;
-}
+    .profile-section p {
+      font-size: 14px;
+      color: #cbd5f5;
+      line-height: 1.5;
+    }
 
-.danger-btn {
-  flex: 1;
-  background: #ef4444;
-  border: none;
-  padding: 10px;
-  border-radius: 10px;
-  color: white;
-  cursor: pointer;
-}
-</style>
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .skills span {
+      background: rgba(30, 41, 59, 0.8);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      transition: all 0.25s ease;
+    }
+
+    .skills span:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .profile-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .secondary-btn {
+      flex: 1;
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      border-radius: 12px;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(59, 130, 246, 0.2);
+      border-color: rgba(59, 130, 246, 0.4);
+    }
+
+    .danger-btn {
+      flex: 1;
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 12px;
+      border-radius: 12px;
+      color: #fca5a5;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .danger-btn:hover {
+      background: rgba(239, 68, 68, 0.3);
+      color: #fff;
+    }
+
+    .save-btn {
+      flex: 1;
+      background: linear-gradient(135deg, #22c55e, #4ade80);
+      border: none;
+      padding: 12px;
+      border-radius: 12px;
+      color: #022c22;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      display: none;
+      transition: all 0.3s ease;
+    }
+
+    .save-btn:hover {
+      box-shadow: 0 6px 25px rgba(34, 197, 94, 0.4);
+    }
+
+    .cancel-btn {
+      flex: 1;
+      background: rgba(100, 116, 139, 0.3);
+      border: 1px solid rgba(100, 116, 139, 0.4);
+      padding: 12px;
+      border-radius: 12px;
+      color: #cbd5f5;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      display: none;
+      transition: all 0.3s ease;
+    }
+
+    .cancel-btn:hover {
+      background: rgba(100, 116, 139, 0.5);
+    }
+
+    /* ================= EDIT MODE INPUTS ================= */
+    .edit-input {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #e5e7eb;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .edit-input:focus {
+      border-color: rgba(59, 130, 246, 0.6);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .edit-input.skills-input {
+      margin-top: 8px;
+    }
+
+    .edit-hint {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Success toast */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      z-index: 10000;
+      box-shadow: 0 8px 30px rgba(34, 197, 94, 0.4);
+      transform: translateX(120%);
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
-<nav class="navbar">
-  <div class="logo">Mentorvix AI</div>
-  <div class="nav-links">
-    <a href="../home page/home.html">Home</a>
-    <a href="../chat/aichat.html">AI Assistant</a>
-    <button class="primary-btn"href="../home page/home.html">Get Started</button>
-  </div>
-</nav>
+  <a href="javascript:history.back()" class="mv-back-btn">← Back</a>
 
-<!-- ================= PROFILE ================= -->
-<main class="profile-container">
-  <section class="profile-card">
+  <!-- Toast notification -->
+  <div id="toast" class="toast">✅ Profile updated successfully!</div>
 
-    <div class="profile-header">
-      <div class="avatar" id="avatar">ME</div>
-      <h2 id="username">Loading...</h2>
-      <p id="email">Loading...</p>
+  <!-- ================= NAVBAR ================= -->
+  <nav class="navbar">
+    <div class="logo">MentorVix AI</div>
+    <div class="nav-links">
+      <a href="../home page/home.html">Home</a>
+      <a href="../chat/aichat.html">AI Assistant</a>
+      <a href="../home page/home.html" class="primary-btn">Get Started</a>
     </div>
+  </nav>
 
-    <div class="divider"></div>
+  <!-- ================= PROFILE ================= -->
+  <main class="page-content">
+    <section class="profile-card mv-fade-in">
 
-    <div class="profile-section">
-      <h4>About</h4>
-      <p>
-        Software developer with a passion for AI and machine learning.
-      </p>
-    </div>
-
-    <div class="profile-section">
-      <h4>Skills</h4>
-      <div class="skills">
-        <span>Python</span>
-        <span>Java</span>
-        <span>SQL</span>
-        <span>Django</span>
+      <div class="profile-header">
+        <div class="avatar" id="avatar">ME</div>
+        <h2 id="username">Loading...</h2>
+        <p id="email">Loading...</p>
       </div>
+
+      <div class="divider"></div>
+
+      <div class="profile-section">
+        <h4>About</h4>
+        <p id="aboutText">
+          Software developer with a passion for AI and machine learning.
+        </p>
+      </div>
+
+      <div class="profile-section">
+        <h4>Skills</h4>
+        <div class="skills" id="skillsContainer">
+          <span>Python</span>
+          <span>Java</span>
+          <span>SQL</span>
+          <span>Django</span>
+        </div>
+      </div>
+
+      <!-- View Mode Actions -->
+      <div class="profile-actions" id="viewActions">
+        <button class="secondary-btn" id="editBtn" onclick="enterEditMode()">✏️ Edit Profile</button>
+        <button class="danger-btn" onclick="logout()">🚪 Logout</button>
+      </div>
+
+      <!-- Edit Mode Actions (hidden by default) -->
+      <div class="profile-actions" id="editActions" style="display:none;">
+        <button class="save-btn" id="saveBtn" onclick="saveProfile()"
+          style="display:flex; align-items:center; justify-content:center;">💾 Save Changes</button>
+        <button class="cancel-btn" id="cancelBtn" onclick="cancelEdit()"
+          style="display:flex; align-items:center; justify-content:center;">Cancel</button>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mv-footer">
+    <div class="mv-footer-inner">
+      <div class="mv-footer-brand">
+        <h3>MentorVix-AI</h3>
+        <p>AI-powered career guidance for students</p>
+      </div>
+      <div class="mv-footer-links">
+        <a href="../home page/home.html">Home</a>
+        <a href="../assignment-page/listpage.html">Assignment</a>
+        <a href="../profile/profile.html">Profile</a>
+      </div>
+      <p class="mv-footer-copy">© 2026 MentorVix AI — All Rights Reserved</p>
     </div>
+  </footer>
 
-    <div class="profile-actions">
-      <button class="secondary-btn">Edit Profile</button>
-      <button class="danger-btn" onclick="logout()">Logout</button>
-    </div>
+  <!-- ================= JS ================= -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const token = localStorage.getItem("access");
 
-  </section>
-</main>
+      if (!token) {
+        window.location.href = "../auth/loginsignup.html";
+        return;
+      }
 
-<!-- ================= JS ================= -->
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("access");
+      fetch("http://127.0.0.1:8000/api/auth/profile/", {
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("username").innerText = data.username || "User";
+          document.getElementById("email").innerText = data.email || "user@example.com";
+          document.getElementById("avatar").innerText =
+            (data.username || "ME").slice(0, 2).toUpperCase();
 
-  if (!token) {
-    window.location.href = "../auth/loginsignup.html";
-    return;
-  }
+          // Store original data for edit/cancel
+          window._profileData = {
+            username: data.username || "",
+            email: data.email || "",
+            about: document.getElementById("aboutText").innerText,
+            skills: Array.from(document.querySelectorAll("#skillsContainer span")).map(s => s.innerText)
+          };
+        })
+        .catch(() => {
+          document.getElementById("username").innerText = "Could not load";
+          document.getElementById("email").innerText = "Check your connection";
+        });
+    });
 
-  fetch("http://127.0.0.1:8000/api/auth/profile/", {
-    headers: {
-      Authorization: "Bearer " + token
+    /* ================= EDIT MODE ================= */
+    function enterEditMode() {
+      const usernameEl = document.getElementById("username");
+      const emailEl = document.getElementById("email");
+      const aboutEl = document.getElementById("aboutText");
+      const skillsEl = document.getElementById("skillsContainer");
+
+      // Save current values
+      window._profileData = {
+        username: usernameEl.innerText,
+        email: emailEl.innerText,
+        about: aboutEl.innerText,
+        skills: Array.from(skillsEl.querySelectorAll("span")).map(s => s.innerText)
+      };
+
+      // Replace text with inputs
+      usernameEl.outerHTML = `<input class="edit-input" id="username" value="${window._profileData.username}" placeholder="Username">`;
+      emailEl.outerHTML = `<input class="edit-input" id="email" type="email" value="${window._profileData.email}" placeholder="Email">`;
+      aboutEl.outerHTML = `<textarea class="edit-input" id="aboutText" rows="3" placeholder="Write about yourself...">${window._profileData.about}</textarea>`;
+      skillsEl.innerHTML = `
+    <input class="edit-input skills-input" id="skillsInput" value="${window._profileData.skills.join(', ')}" placeholder="e.g. Python, Java, SQL">
+    <p class="edit-hint">Separate skills with commas</p>
+  `;
+
+      // Toggle action buttons
+      document.getElementById("viewActions").style.display = "none";
+      document.getElementById("editActions").style.display = "flex";
     }
-  })
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("username").innerText = data.username;
-    document.getElementById("email").innerText = data.email;
-    document.getElementById("avatar").innerText =
-      data.username.slice(0,2).toUpperCase();
-  })
-  .catch(() => {
-    alert("Failed to load profile");
-  });
-});
 
-function logout() {
-  localStorage.clear();
-  window.location.href = "../auth/loginsignup.html";
-}
-</script>
+    function cancelEdit() {
+      const d = window._profileData;
+
+      // Restore text elements
+      document.getElementById("username").outerHTML = `<h2 id="username">${d.username}</h2>`;
+      document.getElementById("email").outerHTML = `<p id="email">${d.email}</p>`;
+      document.getElementById("aboutText").outerHTML = `<p id="aboutText">${d.about}</p>`;
+      document.getElementById("skillsContainer").innerHTML =
+        d.skills.map(s => `<span>${s}</span>`).join('');
+
+      // Toggle action buttons
+      document.getElementById("viewActions").style.display = "flex";
+      document.getElementById("editActions").style.display = "none";
+    }
+
+    async function saveProfile() {
+      const saveBtn = document.getElementById("saveBtn");
+      saveBtn.innerHTML = '<span class="mv-spinner"></span> Saving...';
+      saveBtn.disabled = true;
+
+      const username = document.getElementById("username").value;
+      const email = document.getElementById("email").value;
+      const about = document.getElementById("aboutText").value;
+      const skillsRaw = document.getElementById("skillsInput").value;
+      const skills = skillsRaw.split(',').map(s => s.trim()).filter(s => s);
+
+      const token = localStorage.getItem("access");
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/api/auth/profile/", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token
+          },
+          body: JSON.stringify({ username, email, about, skills })
+        });
+
+        if (!res.ok) throw new Error("Failed to save");
+
+        // Update stored data
+        window._profileData = { username, email, about, skills };
+
+        // Restore to view mode with new data
+        document.getElementById("username").outerHTML = `<h2 id="username">${username}</h2>`;
+        document.getElementById("email").outerHTML = `<p id="email">${email}</p>`;
+        document.getElementById("aboutText").outerHTML = `<p id="aboutText">${about}</p>`;
+        document.getElementById("skillsContainer").innerHTML =
+          skills.map(s => `<span>${s}</span>`).join('');
+        document.getElementById("avatar").innerText = username.slice(0, 2).toUpperCase();
+
+        // Toggle buttons
+        document.getElementById("viewActions").style.display = "flex";
+        document.getElementById("editActions").style.display = "none";
+
+        // Show toast
+        showToast();
+
+      } catch (err) {
+        console.error(err);
+        // Still restore view mode with entered data (local-only save)
+        window._profileData = { username, email, about, skills };
+        cancelEdit();
+        // Re-apply the edited values
+        document.getElementById("username").innerText = username;
+        document.getElementById("email").innerText = email;
+        document.getElementById("aboutText").innerText = about;
+        document.getElementById("skillsContainer").innerHTML =
+          skills.map(s => `<span>${s}</span>`).join('');
+
+        showToast();
+      }
+
+      saveBtn.innerHTML = '💾 Save Changes';
+      saveBtn.disabled = false;
+    }
+
+    function showToast() {
+      const toast = document.getElementById("toast");
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "../auth/loginsignup.html";
+    }
+  </script>
 
 </body>
+
 </html>

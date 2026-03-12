@@ -1,0 +1,258 @@
+/* ===============================================================
+   MentorVix-AI — Global Shared Styles
+   Linked from every page for consistent footer, back button,
+   loading spinner, hover effects, and color theme.
+   =============================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ================= CSS VARIABLES ================= */
+:root {
+    --mv-bg-deep: #020617;
+    --mv-bg: #071f4d;
+    --mv-bg-card: rgba(255, 255, 255, 0.05);
+    --mv-accent: #3b82f6;
+    --mv-accent-light: #60a5fa;
+    --mv-accent-glow: rgba(59, 130, 246, 0.35);
+    --mv-green: #22c55e;
+    --mv-text: #e5e7eb;
+    --mv-text-muted: #94a3b8;
+    --mv-footer-bg: #030e24;
+    --mv-border: rgba(255, 255, 255, 0.08);
+}
+
+/* ================= BACK BUTTON ================= */
+.mv-back-btn {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 9999;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.07);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 50px;
+    color: #cbd5f5;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.mv-back-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+    border-color: rgba(59, 130, 246, 0.4);
+    color: #ffffff;
+    transform: translateX(-4px);
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.2);
+}
+
+/* ================= FOOTER ================= */
+.mv-footer {
+    background: var(--mv-footer-bg);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 40px 20px 24px;
+    margin-top: 60px;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.mv-footer-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.mv-footer-brand h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 6px;
+    letter-spacing: 1px;
+}
+
+.mv-footer-brand p {
+    font-size: 14px;
+    color: var(--mv-text-muted);
+    margin: 0 0 20px;
+}
+
+.mv-footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.mv-footer-links a {
+    color: var(--mv-accent-light);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.25s ease;
+    position: relative;
+}
+
+.mv-footer-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--mv-accent);
+    transition: width 0.3s ease;
+}
+
+.mv-footer-links a:hover {
+    color: #ffffff;
+}
+
+.mv-footer-links a:hover::after {
+    width: 100%;
+}
+
+.mv-footer-copy {
+    font-size: 13px;
+    color: #475569;
+    margin: 0;
+}
+
+.mv-footer-socials {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.mv-footer-socials a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--mv-text-muted);
+    text-decoration: none;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    border: 1px solid var(--mv-border);
+}
+
+.mv-footer-socials a:hover {
+    background: var(--mv-accent);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px var(--mv-accent-glow);
+}
+
+/* ================= LOADING SPINNER ================= */
+.mv-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    border-top-color: var(--mv-accent-light);
+    border-radius: 50%;
+    animation: mv-spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+
+@keyframes mv-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Typing dots animation (for chat) */
+.mv-typing-dots::after {
+    content: '';
+    animation: mv-dots 1.4s steps(4, end) infinite;
+}
+
+@keyframes mv-dots {
+    0% {
+        content: '';
+    }
+
+    25% {
+        content: '.';
+    }
+
+    50% {
+        content: '..';
+    }
+
+    75% {
+        content: '...';
+    }
+
+    100% {
+        content: '';
+    }
+}
+
+/* Fade-in animation for page load */
+.mv-fade-in {
+    animation: mv-fadeIn 0.6s ease-out both;
+}
+
+@keyframes mv-fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Pulse glow for loading states */
+.mv-pulse {
+    animation: mv-pulse 2s ease-in-out infinite;
+}
+
+@keyframes mv-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* ================= GLOBAL BUTTON HOVER POLISH ================= */
+/* Any button on the site gets a smooth transition */
+button,
+.btn,
+input[type="submit"],
+.choose-btn,
+.analyze-btn {
+    transition: all 0.3s ease !important;
+}
+
+button:hover,
+.btn:hover,
+input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+button:active,
+.btn:active,
+input[type="submit"]:active {
+    transform: translateY(0);
+}

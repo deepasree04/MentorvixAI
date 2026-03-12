@@ -1,236 +1,384 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>MENTORVIX AI — Chat</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>MENTORVIX AI — Chat</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../shared/global.css">
 
-<style>
-:root{
-  --bg1:#020617;
-  --bg2:#071022;
-  --bot:#0f2a44;
-  --user:#14325a;
-  --accent:#5da9ff;
-  --text:#e7f1fb;
-}
+  <style>
+    :root {
+      --bg1: #020617;
+      --bg2: #071022;
+      --bot: #0f2a44;
+      --user: #14325a;
+      --accent: #5da9ff;
+      --text: #e7f1fb;
+    }
 
-*{box-sizing:border-box}
+    * {
+      box-sizing: border-box;
+    }
 
-html,body{
-  height:100%;
-  margin:0;
-  font-family:Segoe UI, Arial, sans-serif;
-  background:linear-gradient(180deg,var(--bg1),var(--bg2));
-  color:var(--text);
-}
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg1), var(--bg2));
+      color: var(--text);
+    }
 
-/* MAIN APP */
-.app{
-  width:100%;
-  max-width: 900px;
-  height:100vh;
-  margin:auto;
-  display:flex;
-  flex-direction:column;
-  background:#071630;
-}
+    /* MAIN APP */
+    .app {
+      width: 100%;
+      max-width: 900px;
+      height: 100vh;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      background: #071630;
+      border-left: 1px solid rgba(255, 255, 255, 0.04);
+      border-right: 1px solid rgba(255, 255, 255, 0.04);
+    }
 
-/* HEADER */
-header{
-  padding:16px;
-  border-bottom:1px solid rgba(255,255,255,0.05);
-}
-header h2{margin:0}
-header small{color:#9fb2c8}
+    /* HEADER */
+    header {
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-/* CHAT AREA */
-.chat{
-  flex:1;
-  padding:16px;
-  overflow-y:auto;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-}
+    header h2 {
+      margin: 0;
+      font-size: 20px;
+    }
 
-.msg{
-  max-width:75%;
-  padding:14px 16px;
-  border-radius:14px;
-  font-size:15px;
-}
+    header small {
+      color: #9fb2c8;
+    }
 
-.bot{
-  background:var(--bot);
-  align-self:flex-start;
-}
+    .header-back {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.25s;
+    }
 
-.user{
-  background:var(--user);
-  align-self:flex-end;
-}
+    .header-back:hover {
+      color: white;
+    }
 
-/* INPUT */
-.composer{
-  display:flex;
-  gap:10px;
-  padding:14px;
-  border-top:1px solid rgba(255,255,255,0.05);
-}
+    /* CHAT AREA */
+    .chat {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
 
-input{
-  flex:1;
-  padding:22px;
-  font-size:16px;
-  border-radius:16px;
-  border:none;
-  outline:none;
-}
+    .msg {
+      max-width: 75%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      animation: msgSlide 0.3s ease-out both;
+      white-space: pre-wrap;
+    }
 
-button{
-  padding:22px 26px;
-  font-size:16px;
-  border:none;
-  border-radius:16px;
-  background:var(--accent);
-  font-weight:bold;
-  cursor:pointer;
-  .quick-suggestions{
-  display:flex;
-  gap:8px;
-  padding:10px 16px;
-  flex-wrap:wrap;
-}
+    @keyframes msgSlide {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
 
-.quick-suggestions button{
-  background:rgba(93,169,255,0.15);
-  border:1px solid rgba(93,169,255,0.3);
-  color:#cfe8ff;
-  padding:6px 12px;
-  border-radius:20px;
-  font-size:13px;
-  cursor:pointer;
-}
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-.quick-suggestions button:hover{
-  background:rgba(93,169,255,0.3);
-}
+    .bot {
+      background: var(--bot);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
 
-}
-.typing{
-  opacity:0.6;
-  font-size:italic;
-}
-</style>
+    .user {
+      background: linear-gradient(135deg, var(--user), #1e3a5f);
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: none;
+      align-self: flex-start;
+      background: var(--bot);
+      padding: 14px 20px;
+      border-radius: 16px;
+      border-bottom-left-radius: 4px;
+    }
+
+    .typing-indicator.show {
+      display: flex;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .typing-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #5da9ff;
+      animation: typingBounce 1.4s infinite;
+    }
+
+    .typing-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typingBounce {
+
+      0%,
+      60%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.3;
+      }
+
+      30% {
+        transform: translateY(-6px);
+        opacity: 1;
+      }
+    }
+
+    /* Quick suggestions */
+    .quick-suggestions {
+      display: flex;
+      gap: 8px;
+      padding: 10px 20px;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .quick-suggestions button {
+      background: rgba(93, 169, 255, 0.1);
+      border: 1px solid rgba(93, 169, 255, 0.25);
+      color: #cfe8ff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: inherit;
+    }
+
+    .quick-suggestions button:hover {
+      background: rgba(93, 169, 255, 0.25);
+      border-color: rgba(93, 169, 255, 0.5);
+      transform: translateY(-1px);
+    }
+
+    /* INPUT */
+    .composer {
+      display: flex;
+      gap: 10px;
+      padding: 14px 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .composer input {
+      flex: 1;
+      padding: 14px 18px;
+      font-size: 15px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      outline: none;
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text);
+      font-family: inherit;
+      transition: border-color 0.3s ease;
+    }
+
+    .composer input:focus {
+      border-color: rgba(93, 169, 255, 0.4);
+    }
+
+    .composer input::placeholder {
+      color: #64748b;
+    }
+
+    .send-btn {
+      padding: 14px 24px;
+      font-size: 15px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2563eb, #5da9ff);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .send-btn:hover {
+      box-shadow: 0 6px 25px rgba(93, 169, 255, 0.35);
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="app">
-  <header>
-    <h2>MENTORVIX <span style="color:#5da9ff">AI</span></h2>
-    <small>AI Chat</small>
-  </header>
+  <div class="app">
+    <header>
+      <div>
+        <a href="javascript:history.back()" class="header-back">← Back</a>
+      </div>
+      <div style="text-align:center;">
+        <h2>MENTORVIX <span style="color:#5da9ff">AI</span></h2>
+        <small>AI Career Chat Assistant</small>
+      </div>
+      <div style="width:50px;"></div>
+    </header>
 
-  <div id="chat" class="chat">
-    <div class="msg bot">Hello! How can I assist you today?</div>
+    <div id="chat" class="chat">
+      <div class="msg bot">👋 Hello! I'm your AI career assistant. Ask me about career paths, skills, or learning
+        resources!</div>
+    </div>
+
+    <!-- Typing indicator -->
+    <div class="typing-indicator" id="typingIndicator">
+      <div class="typing-dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="quick-suggestions">
+      <button onclick="quickSend('Data Science')">📊 Data Science</button>
+      <button onclick="quickSend('Web Development')">🌐 Web Dev</button>
+      <button onclick="quickSend('AI')">🤖 AI</button>
+      <button onclick="quickSend('Cloud')">☁️ Cloud</button>
+    </div>
+
+    <div class="composer">
+      <input id="input" type="text" placeholder="Ask about careers, skills, roadmaps..."
+        onkeydown="if(event.key==='Enter')send()" />
+      <button class="send-btn" onclick="send()">Send</button>
+    </div>
   </div>
 
- <div class="quick-suggestions">
-  <button onclick="quickSend('Data Science')">Data Science</button>
-  <button onclick="quickSend('Web Development')">Web Development</button>
-  <button onclick="quickSend('AI')">AI</button>
-  <button onclick="quickSend('Cloud')">Cloud</button>
-</div>
-<div class="composer">
-  <input id="input"type="text"placeholder="Type a message..."/>
-  <button onclick="send()">Send</button>
-</div>
+  <script>
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("input");
+    const typingIndicator = document.getElementById("typingIndicator");
 
-</div>
-<script>
-const chat = document.getElementById("chat");
-const input = document.getElementById("input");
+    function addBotMessage(text) {
+      const div = document.createElement("div");
+      div.className = "msg bot";
+      div.innerText = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
 
-function addBotMessage(text) {
-    const div = document.createElement("div");
-    div.className = "msg bot";
-    div.innerText = text;
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
-}
+    function addUserMessage(text) {
+      const div = document.createElement("div");
+      div.className = "msg user";
+      div.innerText = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
 
-function addUserMessage(text) {
-    const div = document.createElement("div");
-    div.className = "msg user";
-    div.innerText = text;
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
-}
+    function showTyping() {
+      typingIndicator.classList.add("show");
+      chat.scrollTop = chat.scrollHeight;
+    }
 
-function send() {
-    let message = input.value.trim().toLowerCase();
-    if (!message) return;
+    function hideTyping() {
+      typingIndicator.classList.remove("show");
+    }
 
-    addUserMessage(message);
-    input.value = "";
+    function send() {
+      let message = input.value.trim();
+      if (!message) return;
 
-    fetch("http://127.0.0.1:8000/api/ai-chat/", {
+      addUserMessage(message);
+      input.value = "";
+      showTyping();
+
+      fetch("http://127.0.0.1:8000/api/ai-chat/", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({ interest: message })
-    })
-    .then(res => {
-        if (!res.ok) throw new Error("Server error");
-        return res.json();
-    })
-    .then(data => {
-        let reply = "";
+        body: JSON.stringify({ interest: message.toLowerCase() })
+      })
+        .then(res => {
+          if (!res.ok) throw new Error("Server error");
+          return res.json();
+        })
+        .then(data => {
+          hideTyping();
+          let reply = "";
 
-        if (data.career) {
+          if (data.career) {
             reply += "🎯 Career: " + data.career + "\n\n";
-        }
+          }
 
-        if (data.roadmap) {
+          if (data.roadmap) {
             reply += "📍 Roadmap:\n";
             data.roadmap.forEach((step, i) => {
-                reply += `${i + 1}. ${step}\n`;
+              reply += `${i + 1}. ${step}\n`;
             });
-        }
+          }
 
-        if (data.resources) {
+          if (data.resources) {
             reply += "\n📚 Resources:\n";
 
             if (data.resources.youtube) {
-                reply += "\nYouTube:\n";
-                data.resources.youtube.forEach(link => {
-                    reply += "- " + link + "\n";
-                });
+              reply += "\nYouTube:\n";
+              data.resources.youtube.forEach(link => {
+                reply += "- " + link + "\n";
+              });
             }
 
             if (data.resources.pdf) {
-                reply += "\nPDF:\n";
-                data.resources.pdf.forEach(link => {
-                    reply += "- " + link + "\n";
-                });
+              reply += "\nPDF:\n";
+              data.resources.pdf.forEach(link => {
+                reply += "- " + link + "\n";
+              });
             }
-        }
+          }
 
-        addBotMessage(reply || "⚠️ No data received");
-    })
-    .catch(err => {
-        console.error(err);
-        addBotMessage("❌ Frontend error (check console)");
-    });
-}
+          addBotMessage(reply || "⚠️ No data received");
+        })
+        .catch(err => {
+          hideTyping();
+          console.error(err);
+          addBotMessage("❌ Could not connect to AI server. Please try again later.");
+        });
+    }
 
-function quickSend(text) {
-    input.value = text;
-    send();
-}
-</script>
-</html>
+    function quickSend(text) {
+      input.value = text;
+      send();
+    }
+  </script>
 </body>
+
+</html>
