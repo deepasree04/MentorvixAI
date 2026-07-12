@@ -5,7 +5,7 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import RegisterSerializer
+from .serializers import RegisterSerializer, UserProfileSerializer
 from rest_framework.permissions import IsAuthenticated
 
 @api_view(['POST'])
@@ -37,12 +37,15 @@ def login(request):
         "access": str(refresh.access_token),
     })
 
-@api_view(["GET"])
+@api_view(["GET", "PUT"])
 @permission_classes([IsAuthenticated])
 def profile(request):
-    return Response({
-        "username": request.user.username,
-        "email": request.user.email
-    })
-
-# Create your views here.
+    if request.method == "GET":
+        serializer = UserProfileSerializer(request.user)
+        return Response(serializer.data)
+    elif request.method == "PUT":
+        serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

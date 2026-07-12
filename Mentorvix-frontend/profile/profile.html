@@ -380,7 +380,7 @@
         return;
       }
 
-      fetch("http://127.0.0.1:8000/accounts/api/profile/", {
+      fetch("/accounts/api/profile/", {
         headers: {
           Authorization: "Bearer " + token
         }
@@ -389,6 +389,13 @@
         .then(data => {
           document.getElementById("username").innerText = data.username || "User";
           document.getElementById("email").innerText = data.email || "user@example.com";
+          if (data.about !== undefined && data.about !== null) {
+            document.getElementById("aboutText").innerText = data.about;
+          }
+          if (data.skills !== undefined && data.skills !== null && Array.isArray(data.skills)) {
+            document.getElementById("skillsContainer").innerHTML =
+              data.skills.map(s => `<span>${s}</span>`).join('');
+          }
           document.getElementById("avatar").innerText =
             (data.username || "ME").slice(0, 2).toUpperCase();
 
@@ -464,7 +471,7 @@
       const token = localStorage.getItem("access");
 
       try {
-        const res = await fetch("http://127.0.0.1:8000/accounts/profile/", {
+        const res = await fetch("/accounts/api/profile/", {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
