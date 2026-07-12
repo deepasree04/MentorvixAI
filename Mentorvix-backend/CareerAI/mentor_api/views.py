@@ -118,7 +118,6 @@ def rag_stats(request):
     Returns analytics stats: total uploaded documents, total chunks, total conversations,
     total AI requests, RAG usage percentage, average response time.
     """
-    return Response({"env_keys": list(os.environ.keys())})
     try:
         # Retrieve documents from ChromaDB
         from .services.rag import list_documents
