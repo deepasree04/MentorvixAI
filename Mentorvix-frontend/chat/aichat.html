@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <title>MENTORVIX AI — Career Copilot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'shared/global.css' %}">
+
+  <style>
+    :root {
+      --bg1: #020617;
+      --bg2: #071022;
+      --sidebar-bg: #0b1329;
+      --bot: #0f2a44;
+      --user: #14325a;
+      --accent: #5da9ff;
+      --text: #e7f1fb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      background: var(--bg1);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    /* COPILOT CONTAINER */
+    .copilot-container {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 280px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+    }
+
+    .sidebar-header {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .new-chat-btn {
+      width: 100%;
+      background: rgba(93, 169, 255, 0.1);
+      border: 1px dashed var(--accent);
+      color: var(--accent);
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s;
+    }
+
+    .new-chat-btn:hover {
+      background: var(--accent);
+      color: var(--bg1);
+      border-style: solid;
+      transform: translateY(-1px);
+    }
+
+    .conv-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .conv-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: #9fb2c8;
+      font-size: 13.5px;
+      group: hover;
+    }
+
+    .conv-item:hover {
+      background: rgba(255, 255, 255, 0.03);
+      color: white;
+    }
+
+    .conv-item.active {
+      background: rgba(93, 169, 255, 0.12);
+      color: var(--accent);
+      font-weight: 600;
+      border-left: 3px solid var(--accent);
+      border-top-left-radius: 2px;
+      border-bottom-left-radius: 2px;
+    }
+
+    .conv-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      margin-right: 8px;
+    }
+
+    .conv-delete-btn {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 4px;
+      opacity: 0.7;
+      transition: all 0.2s;
+    }
+
+    .conv-delete-btn:hover {
+      color: #ef4444;
+      opacity: 1;
+      transform: scale(1.1);
+    }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sidebar-footer-link {
+      display: block;
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 13.5px;
+      padding: 8px 0;
+      transition: color 0.2s;
+    }
+
+    .sidebar-footer-link:hover {
+      color: white;
+    }
+
+    /* MAIN APP */
+    .app {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #071630;
+      position: relative;
+    }
+
+    /* HEADER */
+    header {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(7, 22, 48, 0.4);
+      backdrop-filter: blur(10px);
+    }
+
+    header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    header small {
+      color: #9fb2c8;
+    }
+
+    .menu-toggle {
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: none;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .header-link {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 13.5px;
+      transition: color 0.25s;
+    }
+
+    .header-link:hover {
+      color: white;
+    }
+
+    /* CHAT AREA */
+    .chat {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .msg {
+      max-width: 80%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      animation: msgSlide 0.3s ease-out both;
+      white-space: pre-wrap;
+    }
+
+    @keyframes msgSlide {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .bot {
+      background: var(--bot);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .user {
+      background: linear-gradient(135deg, var(--user), #1e3a5f);
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Source Citations UI */
+    .msg-sources {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    .msg-sources-title {
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 6px;
+      font-size: 11.5px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .msg-sources-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .source-badge {
+      background: rgba(93, 169, 255, 0.08);
+      border: 1px solid rgba(93, 169, 255, 0.15);
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: #e2e8f0;
+    }
+
+    .conf-badge {
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.25);
+      color: #4ade80;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: none;
+      align-self: flex-start;
+      background: var(--bot);
+      padding: 14px 20px;
+      border-radius: 16px;
+      border-bottom-left-radius: 4px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .typing-indicator.show {
+      display: flex;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .typing-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: typingBounce 1.4s infinite;
+    }
+
+    .typing-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typingBounce {
+      0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.3;
+      }
+      30% {
+        transform: translateY(-6px);
+        opacity: 1;
+      }
+    }
+
+    /* Quick suggestions */
+    .quick-suggestions {
+      display: flex;
+      gap: 8px;
+      padding: 10px 24px;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .quick-suggestions button {
+      background: rgba(93, 169, 255, 0.08);
+      border: 1px solid rgba(93, 169, 255, 0.2);
+      color: #cfe8ff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-family: inherit;
+    }
+
+    .quick-suggestions button:hover {
+      background: rgba(93, 169, 255, 0.2);
+      border-color: rgba(93, 169, 255, 0.4);
+      transform: translateY(-1px);
+    }
+
+    /* INPUT */
+    .composer {
+      display: flex;
+      gap: 10px;
+      padding: 16px 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .composer input {
+      flex: 1;
+      padding: 14px 18px;
+      font-size: 14.5px;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      outline: none;
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text);
+      font-family: inherit;
+      transition: border-color 0.3s ease;
+    }
+
+    .composer input:focus {
+      border-color: rgba(93, 169, 255, 0.4);
+    }
+
+    .composer input::placeholder {
+      color: #64748b;
+    }
+
+    .send-btn {
+      padding: 14px 24px;
+      font-size: 15px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2563eb, #5da9ff);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: inherit;
+    }
+
+    .send-btn:hover {
+      box-shadow: 0 6px 25px rgba(93, 169, 255, 0.35);
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: white;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      z-index: 10000;
+      box-shadow: 0 8px 30px rgba(34, 197, 94, 0.4);
+      transform: translateY(120%);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* Empty state */
+    .empty-chat-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 1;
+      text-align: center;
+      color: #64748b;
+      padding: 40px;
+      gap: 16px;
+    }
+
+    .empty-chat-icon {
+      font-size: 52px;
+      opacity: 0.6;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+      .sidebar {
+        position: fixed;
+        left: -280px;
+        z-index: 2000;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+      }
+      .sidebar.show {
+        left: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">✅ Conversation deleted</div>
+
+  <div class="copilot-container">
+    <!-- Sidebar for Chat History -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="new-chat-btn" onclick="startNewChat()">
+          <span>➕</span> New Conversation
+        </button>
+      </div>
+
+      <div class="conv-list" id="convList">
+        <!-- Dynamically populated -->
+      </div>
+
+      <div class="sidebar-footer">
+        <a href="/" class="sidebar-footer-link">🏠 Return Home</a>
+        <a href="/knowledge-base/" class="sidebar-footer-link">📚 Knowledge Base</a>
+      </div>
+    </aside>
+
+    <!-- Main Chat Workspace -->
+    <main class="app">
+      <header>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">☰</button>
+          <div>
+            <h2>MENTORVIX <span style="color:#5da9ff">AI</span></h2>
+            <small>Career Copilot Dashboard</small>
+          </div>
+        </div>
+        <div class="header-right">
+          <a href="/accounts/profile/" class="header-link">Profile</a>
+          <a href="/knowledge-base/" class="header-link">Knowledge Base</a>
+        </div>
+      </header>
+
+      <!-- Chat viewport -->
+      <div id="chat" class="chat">
+        <!-- Dynamically populated -->
+      </div>
+
+      <!-- Typing indicator -->
+      <div class="typing-indicator" id="typingIndicator">
+        <div class="typing-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <!-- Suggestions -->
+      <div class="quick-suggestions" id="suggestionsContainer">
+        <button onclick="quickSend('Suggest Full Stack roadmap')">📊 Full Stack Roadmap</button>
+        <button onclick="quickSend('What skills are needed for Cloud Engineer?')">☁️ Cloud Skills</button>
+        <button onclick="quickSend('How to get into Data Analytics?')">📈 Data Science path</button>
+      </div>
+
+      <!-- Composer Input -->
+      <div class="composer">
+        <input id="input" type="text" placeholder="Message Career Copilot..."
+          onkeydown="if(event.key==='Enter')send()" />
+        <button class="send-btn" onclick="send()">Send</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        for (let cookie of document.cookie.split(';')) {
+          cookie = cookie.trim();
+          if (cookie.startsWith(name + '=')) {
+            cookieValue = decodeURIComponent(cookie.slice(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+
+    const chat = document.getElementById("chat");
+    const input = document.getElementById("input");
+    const typingIndicator = document.getElementById("typingIndicator");
+    const convList = document.getElementById("convList");
+    const sidebar = document.getElementById("sidebar");
+    const toast = document.getElementById("toast");
+
+    let activeConversationId = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadConversationHistory();
+      renderEmptyChatState();
+    });
+
+    function toggleSidebar() {
+      sidebar.classList.toggle("show");
+    }
+
+    function showToast(msg) {
+      toast.innerText = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    function renderEmptyChatState() {
+      chat.innerHTML = `
+        <div class="empty-chat-state">
+          <div class="empty-chat-icon">🚀</div>
+          <div style="font-size: 20px; font-weight: 700; color: white;">AI Career Copilot</div>
+          <div style="font-size: 14px; max-width: 420px; line-height: 1.5;">
+            Welcome! Ask questions regarding career paths, engineering roadmaps, skill requirements, or documents loaded in the Knowledge Base.
+          </div>
+        </div>
+      `;
+      document.getElementById("suggestionsContainer").style.display = "flex";
+    }
+
+    /**
+     * Start a fresh conversation session
+     */
+    function startNewChat() {
+      activeConversationId = null;
+      renderEmptyChatState();
+      
+      // Update sidebar highlight
+      document.querySelectorAll(".conv-item").forEach(item => item.classList.remove("active"));
+      
+      // Close responsive sidebar
+      sidebar.classList.remove("show");
+    }
+
+    /**
+     * Fetch conversation lists for sidebar
+     */
+    async function loadConversationHistory() {
+      try {
+        const response = await fetch("/api/conversations/", {
+          method: "GET",
+          headers: { "Accept": "application/json" }
+        });
+        if (!response.ok) throw new Error("Failed to load threads.");
+        
+        const threads = await response.json();
+        convList.innerHTML = "";
+
+        if (threads.length === 0) {
+          convList.innerHTML = `<div style="text-align: center; color: #475569; font-size: 12px; margin-top: 20px;">No previous chats</div>`;
+          return;
+        }
+
+        threads.forEach(thread => {
+          const div = document.createElement("div");
+          div.className = `conv-item ${activeConversationId === thread.conversation_id ? 'active' : ''}`;
+          div.id = `conv-item-${thread.conversation_id}`;
+          div.onclick = (e) => {
+            // Avoid triggering select when clicking delete button
+            if (!e.target.classList.contains("conv-delete-btn")) {
+              selectConversation(thread.conversation_id);
+            }
+          };
+
+          div.innerHTML = `
+            <span class="conv-title" title="${thread.title}">💬 ${thread.title}</span>
+            <button class="conv-delete-btn" onclick="deleteConversationThread(${thread.conversation_id})">🗑</button>
+          `;
+          convList.appendChild(div);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    /**
+     * Select and load past thread messages
+     */
+    async function selectConversation(convId) {
+      activeConversationId = convId;
+      sidebar.classList.remove("show");
+
+      // Highlight in sidebar
+      document.querySelectorAll(".conv-item").forEach(item => item.classList.remove("active"));
+      const activeItem = document.getElementById(`conv-item-${convId}`);
+      if (activeItem) activeItem.classList.add("active");
+
+      chat.innerHTML = `<div style="display:flex; justify-content:center; padding: 40px;"><span class="mv-spinner" style="width: 28px; height: 28px;"></span> Loading history...</div>`;
+      document.getElementById("suggestionsContainer").style.display = "none";
+
+      try {
+        const response = await fetch(`/api/conversations/${convId}/`, {
+          method: "GET",
+          headers: { "Accept": "application/json" }
+        });
+        if (!response.ok) throw new Error("Could not retrieve messages.");
+
+        const thread = await response.json();
+        chat.innerHTML = "";
+
+        if (thread.messages.length === 0) {
+          renderEmptyChatState();
+          return;
+        }
+
+        thread.messages.forEach(msg => {
+          if (msg.role === "user") {
+            addUserMessage(msg.message);
+          } else {
+            addBotMessage(msg.message, msg.sources);
+          }
+        });
+      } catch (err) {
+        chat.innerHTML = `<div style="text-align: center; color: #fca5a5; padding: 20px;">⚠️ Error loading history: ${err.message}</div>`;
+      }
+    }
+
+    /**
+     * Delete past thread
+     */
+    async function deleteConversationThread(convId) {
+      if (!confirm("Are you sure you want to delete this conversation history?")) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/conversations/${convId}/`, {
+          method: "DELETE",
+          headers: { "X-CSRFToken": getCookie("csrftoken") }
+        });
+        if (!response.ok) throw new Error("Failed to delete thread.");
+
+        showToast("🗑 Conversation deleted");
+        
+        if (activeConversationId === convId) {
+          startNewChat();
+        }
+        
+        loadConversationHistory();
+      } catch (err) {
+        alert("Error deleting conversation: " + err.message);
+      }
+    }
+
+    function addBotMessage(text, sources = []) {
+      const div = document.createElement("div");
+      div.className = "msg bot";
+
+      const textSpan = document.createElement("div");
+      // Strip citations fallback text in case the browser displays it natively
+      const cleanText = text.split("\n\n---\n*Generated using uploaded knowledge.*")[0];
+      textSpan.innerText = cleanText;
+      div.appendChild(textSpan);
+
+      // Render structured citations block below the response if sources are returned
+      if (sources && sources.length > 0) {
+        const sourcesDiv = document.createElement("div");
+        sourcesDiv.className = "msg-sources";
+
+        const title = document.createElement("div");
+        title.className = "msg-sources-title";
+        title.innerHTML = "💡 Generated using uploaded knowledge. Sources:";
+        sourcesDiv.appendChild(title);
+
+        const grid = document.createElement("div");
+        grid.className = "msg-sources-grid";
+
+        sources.forEach(src => {
+          const badge = document.createElement("div");
+          badge.className = "source-badge";
+          const pageText = src.page !== null ? `, Page ${src.page}` : '';
+          badge.innerHTML = `📄 <strong>${src.filename}</strong> (Chunk ${src.chunk}${pageText}) <span class="conf-badge">${src.confidence}% match</span>`;
+          grid.appendChild(badge);
+        });
+
+        sourcesDiv.appendChild(grid);
+        sourcesDiv.style.animation = "msgSlide 0.3s ease-out both";
+        div.appendChild(sourcesDiv);
+      }
+
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function addUserMessage(text) {
+      const div = document.createElement("div");
+      div.className = "msg user";
+      div.innerText = text;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function showTyping() {
+      typingIndicator.classList.add("show");
+      chat.appendChild(typingIndicator);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function hideTyping() {
+      typingIndicator.classList.remove("show");
+    }
+
+    async function send() {
+      let message = input.value.trim();
+      if (!message) return;
+
+      // Hide Suggestions
+      document.getElementById("suggestionsContainer").style.display = "none";
+
+      // If it's a new conversation thread, clear initial empty state
+      if (chat.querySelector(".empty-chat-state")) {
+        chat.innerHTML = "";
+      }
+
+      addUserMessage(message);
+      input.value = "";
+      showTyping();
+
+      try {
+        const response = await fetch("/api/ai-chat/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+          },
+          body: JSON.stringify({
+            message: message,
+            conversation_id: activeConversationId
+          })
+        });
+
+        if (!response.ok) {
+          const errData = await response.json();
+          throw new Error(errData.error || "Server error");
+        }
+
+        const data = await response.json();
+        hideTyping();
+
+        if (data.reply) {
+          addBotMessage(data.reply, data.sources);
+          
+          // Set conversation as active if it was newly created
+          if (!activeConversationId && data.conversation_id) {
+            activeConversationId = data.conversation_id;
+            loadConversationHistory();
+          }
+        } else {
+          addBotMessage("⚠️ No response from AI");
+        }
+      } catch (err) {
+        hideTyping();
+        addBotMessage("❌ Error: " + err.message);
+      }
+    }
+
+    function quickSend(text) {
+      input.value = text;
+      send();
+    }
+  </script>
+</body>
+</html>

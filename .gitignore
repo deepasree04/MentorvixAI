@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+
+# Environment variables
+.env
+*.env
+
+# Django
+db.sqlite3
+media/
+staticfiles/
+
+# RAG
+rag_data/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploaded files
+Mentorvix-backend/CareerAI/assignments/*.pdf
+Mentorvix-backend/CareerAI/media/
+Mentorvix-backend/CareerAI/rag_data/
+
+# Django uploads
+Mentorvix-backend/CareerAI/media/
+
+# ChromaDB
+Mentorvix-backend/CareerAI/rag_data/
+
+# SQLite
+Mentorvix-backend/CareerAI/db.sqlite

@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assessments | MentorVix AI</title>
+  <link rel="stylesheet" href="{% static 'shared/global.css' %}">
+
+  <style>
+    body {
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      background: linear-gradient(180deg, #020617, #071630);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    .page-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 60px 20px 40px;
+    }
+
+    .container {
+      width: 560px;
+      max-width: 100%;
+    }
+
+    .container h2 {
+      margin-bottom: 8px;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .container .subtitle {
+      color: var(--mv-text-muted);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .assessment {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 22px 24px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .assessment:hover {
+      border-color: rgba(59, 130, 246, 0.4);
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(59, 130, 246, 0.15);
+    }
+
+    .assessment h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .assessment p {
+      font-size: 14px;
+      color: var(--mv-text-muted);
+      margin: 0 0 14px;
+    }
+
+    .assessment button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+    }
+
+    .assessment button:hover {
+      box-shadow: 0 6px 25px rgba(37, 99, 235, 0.5);
+    }
+
+    .assessment .emoji {
+      font-size: 28px;
+      margin-bottom: 10px;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <a href="javascript:history.back()" class="mv-back-btn">← Back</a>
+
+  <div class="page-content">
+    <div class="container mv-fade-in">
+      <h2>📝 Assessments</h2>
+      <p class="subtitle">Test your knowledge and get AI-powered feedback on your answers.</p>
+
+      <div class="assessment">
+        <span class="emoji">🌐</span>
+        <h3>HTML Basics</h3>
+        <p>Explain common HTML tags with examples.</p>
+        <button onclick="startAssessment('html')">Start Assessment →</button>
+      </div>
+
+      <div class="assessment">
+        <span class="emoji">⚡</span>
+        <h3>JavaScript Basics</h3>
+        <p>Explain variables, loops, and functions.</p>
+        <button onclick="startAssessment('js')">Start Assessment →</button>
+      </div>
+
+      <div class="assessment">
+        <span class="emoji">🐍</span>
+        <h3>Python Basics</h3>
+        <p>Explain data types and control structures.</p>
+        <button onclick="startAssessment('python')">Start Assessment →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mv-footer">
+    <div class="mv-footer-inner">
+      <div class="mv-footer-brand">
+        <h3>MentorVix-AI</h3>
+        <p>AI-powered career guidance for students</p>
+      </div>
+      <div class="mv-footer-links">
+        <a href="/">Home</a>
+      </div>
+      <p class="mv-footer-copy">© 2026 MentorVix AI — All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <script>
+    // AUTH GUARD: redirect to login if not authenticated
+    if (!localStorage.getItem('access')) {
+      window.location.href = '../auth/loginsignup.html?redirect=assignment';
+    }
+
+    function startAssessment(type) {
+      window.location.href =
+        "/assignments/upload-page/?assessment="+ type;
+    }
+  </script>
+
+</body>
+
+</html>

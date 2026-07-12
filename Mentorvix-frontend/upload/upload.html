@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <title>Upload Assignment | MentorVix AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'shared/global.css' %}">
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, #020617, #071630);
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+      color: white;
+    }
+
+    .page-content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px 40px;
+    }
+
+    .card {
+      width: 440px;
+      max-width: 100%;
+      background: rgba(10, 25, 60, 0.85);
+      backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 32px;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(93, 169, 255, 0.2);
+      border: 1px solid rgba(93, 169, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      box-shadow: 0 0 50px rgba(93, 169, 255, 0.3);
+    }
+
+    .card-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    h2 {
+      color: #5da9ff;
+      margin-bottom: 8px;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .desc {
+      color: #b8c7dd;
+      font-size: 14px;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .choose-btn {
+      display: block;
+      width: 100%;
+      background: linear-gradient(135deg, #3b82f6, #5da9ff);
+      color: #00142d;
+      border: none;
+      padding: 14px;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .choose-btn:hover {
+      background: linear-gradient(135deg, #5da9ff, #7bbcff);
+      box-shadow: 0 6px 25px rgba(93, 169, 255, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .status {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #ffb703;
+      min-height: 20px;
+    }
+
+    .analyze-btn {
+      margin-top: 18px;
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 15px;
+      background: #334155;
+      color: #94a3b8;
+      cursor: not-allowed;
+      transition: all 0.3s ease;
+    }
+
+    .analyze-btn.active {
+      background: linear-gradient(135deg, #22c55e, #4ade80);
+      color: #022c22;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3);
+    }
+
+    .analyze-btn.active:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(34, 197, 94, 0.45);
+    }
+
+    /* Loading overlay */
+    .loading-overlay {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .loading-overlay.show {
+      display: flex;
+    }
+
+    .loading-text {
+      color: var(--mv-accent-light);
+      font-size: 14px;
+      font-weight: 500;
+    }
+  </style>
+</head>
+
+<body>
+
+  <a href="javascript:history.back()" class="mv-back-btn">← Back</a>
+
+  <div class="page-content">
+    <div class="card mv-fade-in">
+      <div class="card-icon">📄</div>
+      <h2>Upload Assignment</h2>
+      <p class="desc">
+        Upload your assignment file (PDF or DOCX).<br>
+        Our AI will analyze it and provide personalized feedback.
+      </p>
+
+      <input type="file" id="assignmentFile" accept=".pdf, .docx">
+      <label for="assignmentFile" class="choose-btn">
+        📁 Choose File To Upload
+      </label>
+
+      <div id="status" class="status">No file chosen</div>
+
+      <button id="analyzeBtn" class="analyze-btn" disabled>
+        🔍 Analyze with AI
+      </button>
+
+      <div id="loadingOverlay" class="loading-overlay">
+        <span class="mv-spinner"></span>
+        <span class="loading-text" id="loadingText">Uploading your file...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="mv-footer">
+    <div class="mv-footer-inner">
+      <div class="mv-footer-brand">
+        <h3>MentorVix-AI</h3>
+        <p>AI-powered career guidance for students</p>
+      </div>
+      <div class="mv-footer-links">
+        <a href="/">Home</a>
+      </div>
+      <p class="mv-footer-copy">© 2026 MentorVix AI — All Rights Reserved</p>
+    </div>
+  </footer>
+
+  <script>
+    // ACCESS CONTROL: only allow access from Assignment page (must have ?assessment= param)
+    const assessmentType = new URLSearchParams(window.location.search).get('assessment');
+    if (!assessmentType) {
+      window.location.href = "/assignments/";
+    }
+
+    const fileInput = document.getElementById("assignmentFile");
+    const analyzeBtn = document.getElementById("analyzeBtn");
+    const statusDiv = document.getElementById("status");
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    const loadingText = document.getElementById("loadingText");
+
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+
+      if (!file) {
+        statusDiv.innerText = "No file chosen";
+        analyzeBtn.disabled = true;
+        analyzeBtn.classList.remove("active");
+        return;
+      }
+
+      const allowedTypes = [
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      ];
+
+      if (!allowedTypes.includes(file.type)) {
+        statusDiv.innerText = "❌ Invalid file type — only PDF or DOCX allowed";
+        fileInput.value = "";
+        analyzeBtn.disabled = true;
+        analyzeBtn.classList.remove("active");
+        return;
+      }
+
+      statusDiv.innerText = "✅ " + file.name;
+      analyzeBtn.disabled = false;
+      analyzeBtn.classList.add("active");
+    });
+
+    analyzeBtn.addEventListener("click", async () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      analyzeBtn.disabled = true;
+      analyzeBtn.classList.remove("active");
+      loadingOverlay.classList.add("show");
+      loadingText.innerText = "Uploading your file...";
+
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const uploadRes = await fetch("http://127.0.0.1:8000/assignments/upload/", {
+          method: "POST",
+          body: formData
+        });
+
+        const uploadData = await uploadRes.json();
+        const assignmentId = uploadData.id;
+
+        loadingText.innerText = "🤖 Analyzing with AI...";
+
+        await fetch(`http://127.0.0.1:8000/assignments/analyze/${assignmentId}/`, {
+          method: "POST",
+        });
+
+        window.location.href = `/assignments/review/?id=${assignmentId}`;
+      } catch (err) {
+        loadingOverlay.classList.remove("show");
+        statusDiv.innerText = "❌ Error uploading file. Please try again.";
+        analyzeBtn.disabled = false;
+        analyzeBtn.classList.add("active");
+      }
+    });
+  </script>
+</body>
+
+</html>
