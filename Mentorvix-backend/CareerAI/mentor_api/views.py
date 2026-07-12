@@ -12,7 +12,7 @@ load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+genai.configure(api_key=os.getenv("Gemini_API_KEY"))
 # --- Configuration ---
 
 # Initialize the Gemini 2.0 Flash model with system instructions
