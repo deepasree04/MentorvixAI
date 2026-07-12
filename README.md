@@ -14,6 +14,9 @@ Unlike traditional AI chatbots, MentorVix integrates **Retrieval-Augmented Gener
 The project demonstrates modern AI application development using **Django**, **LangChain**, **Google Gemini**, and **ChromaDB**.
 
 ---
+## 🌐 Live Demo 
+https://mentorvixai.onrender.com
+---
 
 # ✨ Key Features
 
