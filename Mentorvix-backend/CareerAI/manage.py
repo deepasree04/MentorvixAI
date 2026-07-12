@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+try:
+    __import__('pysqlite3')
+    import sys
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass
+
 import os
 import sys
 
