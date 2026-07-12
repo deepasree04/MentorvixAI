@@ -239,12 +239,16 @@ Grounded AI Response
 
 # 📸 Screenshots
 
+## Home page
+![Home Page](screenshots/HOME_PAGE.png)
 
-- Home Page
-- AI Chat
-- Knowledge Base
-- Analytics Dashboard
-- RAG Response
+## AI Career Assistant
+![AI Chat](screenshots/AI_CHAT.png).
+
+## Knowledge Base And Analytics Dashboard
+![RAG Response](screenshots/RAG.png)
+
+![Knowledge base](screenshots/KNOWLEDGE_BASE.png)
 
 ---
 
