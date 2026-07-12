@@ -91,7 +91,7 @@ def get_embedding_model() -> GoogleGenerativeAIEmbeddings:
     Uses the same ``GEMINI_API_KEY`` environment variable as the chat LLM,
     but operates independently so chat code remains untouched.
     """
-    api_key = os.getenv("Gemini_API_KEY") or os.getenv("Gemini_API_KEY")
+    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("Gemini_API_KEY")
     if not api_key:
         raise RAGError(
             "GEMINI_API_KEY is not set. Add it to your environment or .env file."
